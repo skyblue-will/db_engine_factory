@@ -9,21 +9,18 @@ def create_mssql_engine():
     """
     Creates a SQL Server engine using SQLAlchemy with pyodbc.
     """
-    # Retrieve SQL Server credentials from environment variables
     server = os.getenv('SQL_SERVER')
     database = os.getenv('SQL_DATABASE')
     username = os.getenv('SQL_USERNAME')
     password = os.getenv('SQL_PASSWORD')
 
-    # Check that all credentials are provided
     if not all([server, database, username, password]):
         raise ValueError("Missing SQL Server credentials in environment variables.")
 
-    # Construct the connection string with ODBC Driver 17 for SQL Server
     conn_str = f"mssql+pyodbc://{username}:{password}@{server}/{database}?driver=ODBC+Driver+17+for+SQL+Server"
     
-    # Create engine with additional parameters for improved stability and performance
-    return create_engine(conn_str, fast_executemany=True, pool_pre_ping=True)
+    # Set fast_executemany and autocommit options for pyodbc
+    return create_engine(conn_str, fast_executemany=True, pool_pre_ping=True, isolation_level="AUTOCOMMIT")
 
 def create_mysql_engine():
     """
