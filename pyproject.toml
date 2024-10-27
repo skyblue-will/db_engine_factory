@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "db-engine-factory"
-version = "0.1.1"
+version = "0.1.2"
 description = "DB Engine Factory: Simplify connecting to MySQL, MSSQL, and PostgreSQL databases through a single, unified configuration."
 readme = "README.md"
 keywords = ["database", "SQLAlchemy", "MySQL", "PostgreSQL", "MSSQL", "database engine factory"]
