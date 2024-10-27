@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='shared_utils',
-    version='0.2.3',
+    version='0.2.4',
     packages=find_packages(),  # Automatically finds and includes sub-packages like 'tests'
     include_package_data=True,  # Include all package data files specified
     package_data={
