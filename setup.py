@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='shared_utils',
-    version='0.2.4',
+    version='0.2.5',
     packages=find_packages(),  # Automatically finds and includes sub-packages like 'tests'
     include_package_data=True,  # Include all package data files specified
     package_data={
@@ -18,6 +18,7 @@ setup(
     author='Will Palmer',
     author_email='willpalmer@alertacall.com',
     description='Shared utilities for database connections',
+    url='https://github.com/willpalmer81/shared_utils.git',  # Add repository URL
     classifiers=[
         'Programming Language :: Python :: 3',
         'Operating System :: OS Independent',
