@@ -74,5 +74,6 @@ def execute_query(engine, query, params=None):
         ResultProxy: The result of the executed query.
     """
     with engine.connect() as connection:
+        connection = connection.execution_options(autocommit=True)
         result = connection.execute(text(query), params or {})
         return result
