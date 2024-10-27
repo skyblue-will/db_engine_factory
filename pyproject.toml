@@ -1,10 +1,10 @@
 [build-system]
-requires = ["setuptools>=42", "wheel", "twine"]
+requires = ["setuptools>=61.0", "wheel", "twine"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "db-engine-factory"
-version = "0.1.4"
+name = "db_engine_factory"
+version = "0.1.5"
 description = "DB Engine Factory: Simplify connecting to MySQL, MSSQL, and PostgreSQL databases through a single, unified configuration."
 readme = "README.md"
 keywords = ["database", "SQLAlchemy", "MySQL", "PostgreSQL", "MSSQL", "database engine factory"]
@@ -43,7 +43,7 @@ dependencies = [
 "Tracker" = "https://github.com/skyblue-will/db_engine_factory/issues"
 
 [project.scripts]
-test_db_engine_factory = "db_engine_factory.tests:test_connections"
+test_db_engine_factory = "db_engine_factory.cli:test_connections"
 
 [tool.setuptools.packages.find]
 include = ["db_engine_factory", "db_engine_factory.*"]

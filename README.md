@@ -1,6 +1,6 @@
 # DB Engine Factory
 
-**Version**: 0.1.4  
+**Version**: 0.1.5  
 **Author**: Will Palmer  
 **Description**: `DB Engine Factory` is a Python library designed to simplify connecting to multiple database types (MySQL, MSSQL, PostgreSQL) using SQLAlchemy. Connections are configured via a central `.ini` file, streamlining database management for applications needing to work with diverse database systems.
 
