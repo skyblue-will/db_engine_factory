@@ -1,8 +1,8 @@
-# DBEngineFactory
+# DB Engine Factory
 
-**Version**: 0.1.0  
+**Version**: 0.1.1  
 **Author**: Will Palmer  
-**Description**: `DBEngineFactory` is a Python library that simplifies connecting to multiple database types (MySQL, MSSQL, PostgreSQL) through SQLAlchemy, with connections managed via a centralized configuration file. This library is designed to streamline database management for applications that work across diverse database systems.
+**Description**: `DB Engine Factory` is a Python library designed to simplify connecting to multiple database types (MySQL, MSSQL, PostgreSQL) using SQLAlchemy. Connections are configured via a central `.ini` file, streamlining database management for applications needing to work with diverse database systems.
 
 ---
 
@@ -13,7 +13,7 @@
 - [Usage](#usage)
   - [Creating Database Engines](#creating-database-engines)
   - [Testing Connections](#testing-connections)
-- [Example AI Prompt for Assistance](#example-ai-prompt-for-assistance)
+- [AI Assistance Prompt](#ai-assistance-prompt)
 - [Running Tests](#running-tests)
 - [Contributing](#contributing)
 
@@ -21,31 +21,18 @@
 
 ## Installation
 
-1. **Clone the repository**:
+1. **Install the package from PyPI**:
    ```bash
-   git clone https://github.com/willpalmer81/db_engine_factory.git
-   cd db_engine_factory
+   pip install db-engine-factory
    ```
 
-2. **Install the package**:
-   ```bash
-   pip install .
-   ```
-
-   This installs the package and dependencies:
-   - `python-dotenv`
-   - `SQLAlchemy>=2.0`
-   - `pyodbc`
-   - `pymysql`
-   - `psycopg2-binary`
-
-3. **Create a configuration file**: Ensure your `.ini` configuration file (e.g., `db_config.ini`) is in the project root or the directory you run scripts from.
+2. **Create a configuration file**: Ensure your `.ini` configuration file (e.g., `db_config.ini`) is in the project root or the directory where you run scripts.
 
 ## Configuration
 
 ### Setting Up Your `.ini` Configuration File
 
-Create a `.ini` file (e.g., `db_config.ini`) in the project’s root directory. Each section should represent a different database configuration.
+Create a `.ini` file (e.g., `db_config.ini`) in the project’s root directory. Each section represents a database configuration.
 
 #### Example `db_config.ini`
 
@@ -79,18 +66,18 @@ database = mydatabase
 
 **Explanation of Fields**
 
-- **type**: Type of database (`mysql`, `mssql`, or `postgres`).
-- **user / username**: Database username.
+- **type**: Database type (`mysql`, `mssql`, or `postgres`).
+- **user/username**: Database username.
 - **password**: Database password.
-- **host / server**: Database server address.
-- **port**: Database port (default is `3306` for MySQL and `5432` for PostgreSQL).
-- **database**: The name of the database.
+- **host/server**: Database server address.
+- **port**: Database port (`3306` for MySQL, `5432` for PostgreSQL).
+- **database**: Name of the database.
 
 ## Usage
 
 ### Creating Database Engines
 
-Use the functions provided in `db_connection.py` to create database engines. Each function takes a `db_identifier`, which should match the section name in the `.ini` configuration file.
+Use the functions in `db_connection.py` to create database engines. Each function accepts a `db_identifier` matching a section in `db_config.ini`.
 
 ```python
 from db_engine_factory.db_connection import create_mysql_engine, create_mssql_engine, create_postgres_engine
@@ -107,45 +94,41 @@ postgres_engine = create_postgres_engine("postgres_db")
 
 ### Function Parameters
 
-- **create_mysql_engine(db_identifier)**: Creates a MySQL engine based on the configuration in `db_config.ini`.
-- **create_mssql_engine(db_identifier)**: Creates an MSSQL engine using the specified configuration.
-- **create_postgres_engine(db_identifier)**: Creates a PostgreSQL engine according to the configuration provided.
+- **create_mysql_engine(db_identifier)**: Creates a MySQL engine based on the `.ini` configuration.
+- **create_mssql_engine(db_identifier)**: Creates an MSSQL engine using the specified `.ini` section.
+- **create_postgres_engine(db_identifier)**: Creates a PostgreSQL engine per `.ini` configuration.
 
 ### Testing Connections
 
-You can test connections to all configured databases using the command-line script `test_db_engine_factory`, which runs a `SELECT 1` query for each configured database.
+Run `test_db_engine_factory` from the command line to test connections to all configured databases with a simple `SELECT 1` query.
 
 ```bash
 test_db_engine_factory
 ```
 
-This command outputs success or error messages for each database connection attempt, which is useful for confirming that your `.ini` file is configured correctly.
+This outputs success or error messages for each database connection attempt, confirming if `.ini` configurations are correct.
 
-## Example AI Prompt for Assistance
+## AI Assistance Prompt
 
-Here’s a sample prompt you can use with an AI assistant to get help:
+If you need help from an AI assistant, use this example prompt:
 
-> "I'm using `DBEngineFactory` to connect to MySQL, MSSQL, and PostgreSQL databases. I’ve set up my database configurations in a `.ini` file under sections like `[mysql_db]`, `[mssql_db]`, and `[postgres_db]`. I use the functions `create_mysql_engine(db_identifier)`, `create_mssql_engine(db_identifier)`, and `create_postgres_engine(db_identifier)`. Can you help troubleshoot connection issues or assist in verifying query results?"
-
-This provides the AI assistant with key details about your setup, making it easier for them to offer targeted help.
+> "I'm using `DB Engine Factory` to connect to MySQL, MSSQL, and PostgreSQL databases, configured in a `.ini` file under sections like `[mysql_db]`, `[mssql_db]`, and `[postgres_db]`. I use functions like `create_mysql_engine(db_identifier)`, `create_mssql_engine(db_identifier)`, and `create_postgres_engine(db_identifier)`. Could you help troubleshoot any connection issues or verify query results?"
 
 ## Running Tests
 
-The package includes a test script `test.py` for verifying connections to databases specified in the `.ini` file.
+The package includes a test script for verifying database connections defined in the `.ini` file.
 
-To run the tests:
-
-1. Confirm your `.ini` file is correctly configured.
-2. Execute the test command:
+1. Confirm `.ini` file is correctly configured.
+2. Run the test command:
    ```bash
    test_db_engine_factory
    ```
 
-This script will attempt a connection to each database and perform a `SELECT 1` query, with the connection results shown in the console.
+This script connects to each database and runs a `SELECT 1` query, displaying connection results in the console.
 
 ## Contributing
 
-To contribute to `DBEngineFactory`:
+To contribute:
 
 1. **Fork** the repository.
 2. **Create a branch** (`git checkout -b feature/YourFeature`).
@@ -153,6 +136,6 @@ To contribute to `DBEngineFactory`:
 4. **Push to the branch** (`git push origin feature/YourFeature`).
 5. **Open a pull request**.
 
-If you encounter any issues or have feature suggestions, please [open an issue on GitHub](https://github.com/willpalmer81/db_engine_factory/issues).
+If you encounter issues or have suggestions, please [open an issue on GitHub](https://github.com/skyblue-will/db_engine_factory/issues).
 
----
+--- 
