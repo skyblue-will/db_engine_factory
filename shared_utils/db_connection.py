@@ -1,58 +1,50 @@
 import os
-from dotenv import load_dotenv
 from sqlalchemy import create_engine
+from configparser import ConfigParser
 
-# Load environment variables
-load_dotenv()
+# Load the configuration file
+config = ConfigParser()
+config.read('db_config.ini')
 
-def create_mssql_engine():
-    """
-    Creates a SQL Server engine using SQLAlchemy with pyodbc.
-    """
-    server = os.getenv('SQL_SERVER')
-    database = os.getenv('SQL_DATABASE')
-    username = os.getenv('SQL_USERNAME')
-    password = os.getenv('SQL_PASSWORD')
-
-    if not all([server, database, username, password]):
-        raise ValueError("Missing SQL Server credentials in environment variables.")
-
-    conn_str = (
-        f"mssql+pyodbc://{username}:{password}@{server}/{database}"
-        "?driver=ODBC+Driver+18+for+SQL+Server&TrustServerCertificate=yes"
-    )
-    return create_engine(conn_str, pool_pre_ping=True, connect_args={"stream_results": False})
-
-
-def create_mysql_engine():
+def create_mysql_engine(db_identifier):
     """
     Creates a MySQL engine using SQLAlchemy with pymysql.
     """
-    mysql_user = os.getenv('MYSQL_USER')
-    mysql_password = os.getenv('MYSQL_PASSWORD')
-    mysql_host = os.getenv('MYSQL_HOST', 'localhost')
-    mysql_port = os.getenv('MYSQL_PORT', '3306')
-    mysql_db = os.getenv('MYSQL_DATABASE')
-
-    if not all([mysql_user, mysql_password, mysql_db]):
-        raise ValueError("Missing MySQL credentials in environment variables.")
-
-    conn_str = f"mysql+pymysql://{mysql_user}:{mysql_password}@{mysql_host}:{mysql_port}/{mysql_db}"
+    if db_identifier not in config:
+        raise ValueError(f"Database identifier {db_identifier} not found in configuration file.")
+    
+    db_config = config[db_identifier]
+    conn_str = (
+        f"mysql+pymysql://{db_config['user']}:{db_config['password']}@"
+        f"{db_config['host']}:{db_config.get('port', '3306')}/{db_config['database']}"
+    )
     return create_engine(conn_str)
 
+def create_mssql_engine(db_identifier):
+    """
+    Creates an MSSQL engine using SQLAlchemy with pyodbc.
+    """
+    if db_identifier not in config:
+        raise ValueError(f"Database identifier {db_identifier} not found in configuration file.")
 
-def create_postgres_engine():
+    db_config = config[db_identifier]
+    conn_str = (
+        f"mssql+pyodbc://{db_config['username']}:{db_config['password']}@"
+        f"{db_config['server']}/{db_config['database']}?driver=ODBC+Driver+18+for+SQL+Server"
+        "&TrustServerCertificate=yes"
+    )
+    return create_engine(conn_str)
+
+def create_postgres_engine(db_identifier):
     """
     Creates a PostgreSQL engine using SQLAlchemy with psycopg2.
     """
-    pg_user = os.getenv('POSTGRES_USER')
-    pg_password = os.getenv('POSTGRES_PASSWORD')
-    pg_host = os.getenv('POSTGRES_HOST', 'localhost')
-    pg_port = os.getenv('POSTGRES_PORT', '5432')
-    pg_db = os.getenv('POSTGRES_DATABASE')
-
-    if not all([pg_user, pg_password, pg_db]):
-        raise ValueError("Missing PostgreSQL credentials in environment variables.")
-
-    conn_str = f"postgresql+psycopg2://{pg_user}:{pg_password}@{pg_host}:{pg_port}/{pg_db}"
+    if db_identifier not in config:
+        raise ValueError(f"Database identifier {db_identifier} not found in configuration file.")
+    
+    db_config = config[db_identifier]
+    conn_str = (
+        f"postgresql+psycopg2://{db_config['user']}:{db_config['password']}@"
+        f"{db_config['host']}:{db_config.get('port', '5432')}/{db_config['database']}"
+    )
     return create_engine(conn_str)
