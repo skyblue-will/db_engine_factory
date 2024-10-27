@@ -4,11 +4,11 @@ from setuptools import setup, find_packages
 
 setup(
     name='shared_utils',
-    version='0.1.0',
+    version='0.1.1',
     packages=find_packages(),
     install_requires=[
         'python-dotenv',
-        'SQLAlchemy',
+        'SQLAlchemy>=2.0',
         'pyodbc',
         'pymysql',
         'psycopg2-binary',  # For PostgreSQL connections

@@ -53,3 +53,19 @@ def create_postgres_engine():
 
     conn_str = f"postgresql://{pg_user}:{pg_password}@{pg_host}:{pg_port}/{pg_db}"
     return create_engine(conn_str)
+
+def execute_query(engine, query, params=None):
+    """
+    Executes a SQL query using the provided engine.
+
+    Args:
+        engine: SQLAlchemy engine instance.
+        query (str): The SQL query to execute.
+        params (dict, optional): Parameters for parameterized queries.
+
+    Returns:
+        ResultProxy: The result of the executed query.
+    """
+    with engine.connect() as connection:
+        result = connection.execute(text(query), params or {})
+        return result
