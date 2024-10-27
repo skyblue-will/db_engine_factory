@@ -5,6 +5,9 @@ from sqlalchemy import create_engine, text
 # Load environment variables
 load_dotenv()
 
+import os
+from sqlalchemy import create_engine
+
 def create_mssql_engine():
     """
     Creates a SQL Server engine using SQLAlchemy with pyodbc.
@@ -17,10 +20,14 @@ def create_mssql_engine():
     if not all([server, database, username, password]):
         raise ValueError("Missing SQL Server credentials in environment variables.")
 
-    conn_str = f"mssql+pyodbc://{username}:{password}@{server}/{database}?driver=ODBC+Driver+18+for+SQL+Server"    
-    
-    # Set fast_executemany and autocommit options for pyodbc
-    return create_engine(conn_str, fast_executemany=True, pool_pre_ping=True, isolation_level="AUTOCOMMIT")
+    # Add TrustServerCertificate=yes to bypass SSL verification
+    conn_str = (
+        f"mssql+pyodbc://{username}:{password}@{server}/{database}"
+        "?driver=ODBC+Driver+18+for+SQL+Server&TrustServerCertificate=yes"
+    )
+
+    # Create engine with fast_executemany and pool_pre_ping options
+    return create_engine(conn_str, fast_executemany=True, pool_pre_ping=True)
 
 def create_mysql_engine():
     """
