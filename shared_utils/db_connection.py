@@ -1,14 +1,14 @@
 import os
 from dotenv import load_dotenv
-from sqlalchemy import create_engine, text
+from sqlalchemy import create_engine
 
 # Load environment variables
 load_dotenv()
 
-import os
-from sqlalchemy import create_engine
-
 def create_mssql_engine():
+    """
+    Creates a SQL Server engine using SQLAlchemy with pyodbc.
+    """
     server = os.getenv('SQL_SERVER')
     database = os.getenv('SQL_DATABASE')
     username = os.getenv('SQL_USERNAME')
@@ -19,16 +19,14 @@ def create_mssql_engine():
 
     conn_str = (
         f"mssql+pyodbc://{username}:{password}@{server}/{database}"
-        "?driver=ODBC+Driver+18+for+SQL+Server&TrustServerCertificate=yes&UseDeclareFetch=1"
+        "?driver=ODBC+Driver+18+for+SQL+Server&TrustServerCertificate=yes"
     )
-
-    # Enable streaming results with stream_results=True
-    return create_engine(conn_str, pool_pre_ping=True, connect_args={"stream_results": True})
+    return create_engine(conn_str, pool_pre_ping=True, connect_args={"stream_results": False})
 
 
 def create_mysql_engine():
     """
-    Creates a MySQL engine using SQLAlchemy.
+    Creates a MySQL engine using SQLAlchemy with pymysql.
     """
     mysql_user = os.getenv('MYSQL_USER')
     mysql_password = os.getenv('MYSQL_PASSWORD')
@@ -42,9 +40,10 @@ def create_mysql_engine():
     conn_str = f"mysql+pymysql://{mysql_user}:{mysql_password}@{mysql_host}:{mysql_port}/{mysql_db}"
     return create_engine(conn_str)
 
+
 def create_postgres_engine():
     """
-    Creates a PostgreSQL engine using SQLAlchemy.
+    Creates a PostgreSQL engine using SQLAlchemy with psycopg2.
     """
     pg_user = os.getenv('POSTGRES_USER')
     pg_password = os.getenv('POSTGRES_PASSWORD')
@@ -55,25 +54,5 @@ def create_postgres_engine():
     if not all([pg_user, pg_password, pg_db]):
         raise ValueError("Missing PostgreSQL credentials in environment variables.")
 
-    conn_str = f"postgresql://{pg_user}:{pg_password}@{pg_host}:{pg_port}/{pg_db}"
+    conn_str = f"postgresql+psycopg2://{pg_user}:{pg_password}@{pg_host}:{pg_port}/{pg_db}"
     return create_engine(conn_str)
-
-def execute_query(engine, query, params=None):
-    """
-    Executes a SQL query using the provided engine.
-
-    Args:
-        engine: SQLAlchemy engine instance.
-        query (str): The SQL query to execute.
-        params (dict, optional): Parameters for parameterized queries.
-
-    Returns:
-        ResultProxy: The result of the executed query.
-    """
-    with engine.connect() as connection:
-        connection = connection.execution_options(
-            autocommit=True,
-            stream_results=True  # Enable streaming to manage large results
-        )
-        result = connection.execute(text(query), params or {})
-        return result
