@@ -9,9 +9,6 @@ import os
 from sqlalchemy import create_engine
 
 def create_mssql_engine():
-    """
-    Creates a SQL Server engine using SQLAlchemy with pyodbc.
-    """
     server = os.getenv('SQL_SERVER')
     database = os.getenv('SQL_DATABASE')
     username = os.getenv('SQL_USERNAME')
@@ -20,14 +17,14 @@ def create_mssql_engine():
     if not all([server, database, username, password]):
         raise ValueError("Missing SQL Server credentials in environment variables.")
 
-    # Add TrustServerCertificate=yes to bypass SSL verification
     conn_str = (
         f"mssql+pyodbc://{username}:{password}@{server}/{database}"
-        "?driver=ODBC+Driver+18+for+SQL+Server&TrustServerCertificate=yes"
+        "?driver=ODBC+Driver+18+for+SQL+Server&TrustServerCertificate=yes&UseDeclareFetch=1"
     )
 
-    # Create engine with fast_executemany and pool_pre_ping options
-    return create_engine(conn_str, fast_executemany=True, pool_pre_ping=True)
+    # Enable streaming results with stream_results=True
+    return create_engine(conn_str, pool_pre_ping=True, connect_args={"stream_results": True})
+
 
 def create_mysql_engine():
     """
@@ -74,6 +71,9 @@ def execute_query(engine, query, params=None):
         ResultProxy: The result of the executed query.
     """
     with engine.connect() as connection:
-        connection = connection.execution_options(autocommit=True)
-        result = connection.execute(text(query), params or {})  # Wrap query with text()
+        connection = connection.execution_options(
+            autocommit=True,
+            stream_results=True  # Enable streaming to manage large results
+        )
+        result = connection.execute(text(query), params or {})
         return result
