@@ -1,10 +1,10 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='shared_utils',
-    version='0.2.5',
-    packages=find_packages(),  # Automatically finds and includes sub-packages like 'tests'
-    include_package_data=True,  # Include all package data files specified
+    name='db_engine_factory',  # Updated name
+    version='0.1.0',
+    packages=find_packages(),  # This will now find 'db_engine_factory' and 'tests'
+    include_package_data=True,
     package_data={
         'tests': ['*.py'],  # Include all Python files in the 'tests' package
     },
@@ -17,8 +17,7 @@ setup(
     ],
     author='Will Palmer',
     author_email='willpalmer@alertacall.com',
-    description='Shared utilities for database connections',
-    url='https://github.com/willpalmer81/shared_utils.git',  # Add repository URL
+    description='Library for managing multiple database connections via configuration',
     classifiers=[
         'Programming Language :: Python :: 3',
         'Operating System :: OS Independent',
@@ -26,7 +25,7 @@ setup(
     python_requires='>=3.6',
     entry_points={
         'console_scripts': [
-            'test_shared_utils=tests.test:test_connections'  # Entry point for running the test script
+            'test_db_engine_factory=tests.test:test_connections'  # Updated command name
         ]
     },
 )
