@@ -17,7 +17,7 @@ def create_mssql_engine():
     if not all([server, database, username, password]):
         raise ValueError("Missing SQL Server credentials in environment variables.")
 
-    conn_str = f"mssql+pyodbc://{username}:{password}@{server}/{database}?driver=ODBC+Driver+17+for+SQL+Server"
+    conn_str = f"mssql+pyodbc://{username}:{password}@{server}/{database}?driver=ODBC+Driver+18+for+SQL+Server"    
     
     # Set fast_executemany and autocommit options for pyodbc
     return create_engine(conn_str, fast_executemany=True, pool_pre_ping=True, isolation_level="AUTOCOMMIT")
