@@ -75,5 +75,5 @@ def execute_query(engine, query, params=None):
     """
     with engine.connect() as connection:
         connection = connection.execution_options(autocommit=True)
-        result = connection.execute(text(query), params or {})
+        result = connection.execute(text(query), params or {})  # Wrap query with text()
         return result
